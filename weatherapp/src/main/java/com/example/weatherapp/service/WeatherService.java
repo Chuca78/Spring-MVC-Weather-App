@@ -77,31 +77,38 @@ public class WeatherService {
                     }
                 }
 
-                // Step 3: Get observation station list for this location
+                // Step 3: Retrieve the list of nearby observation stations from the grid point response
                 String stationsUrl = (String) properties.get("observationStations");
                 Map<String, Object> stationResponse = restTemplate.getForObject(stationsUrl, Map.class);
 
                 if (stationResponse != null && stationResponse.containsKey("features")) {
+                    // Extract the list of observation station features
                     List<Map<String, Object>> features = (List<Map<String, Object>>) stationResponse.get("features");
 
-                    if (!features.isEmpty()) {
-                        // Use the first station in the list
-                        Map<String, Object> firstFeature = features.get(0);
-                        Map<String, Object> stationProps = (Map<String, Object>) firstFeature.get("properties");
+                    // Loop through each station in the list to find one with valid temperature data
+                    for (Map<String, Object> feature : features) {
+                        // Extract station properties including the station identifier
+                        Map<String, Object> stationProps = (Map<String, Object>) feature.get("properties");
                         String stationId = (String) stationProps.get("stationIdentifier");
 
-                        // Step 4: Get current observation from the selected station
+                        // Build the URL to fetch the latest weather observation for this station
                         String obsUrl = "https://api.weather.gov/stations/" + stationId + "/observations/latest";
                         Map<String, Object> obsResponse = restTemplate.getForObject(obsUrl, Map.class);
 
                         if (obsResponse != null && obsResponse.containsKey("properties")) {
                             Map<String, Object> obsProps = (Map<String, Object>) obsResponse.get("properties");
+
+                            // Extract the temperature data map
                             Map<String, Object> tempMap = (Map<String, Object>) obsProps.get("temperature");
 
-                            // Convert temperature from Celsius to Fahrenheit
+                            // Check if temperature value is present and valid
                             if (tempMap != null && tempMap.get("value") != null) {
+                                // Convert from Celsius to Fahrenheit
                                 double tempC = ((Number) tempMap.get("value")).doubleValue();
                                 currentTempFahrenheit = (tempC * 9 / 5) + 32;
+
+                                // Stop after finding the first station with valid data
+                                break;
                             }
                         }
                     }
