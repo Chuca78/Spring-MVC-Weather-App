@@ -1,0 +1,71 @@
+/* Base styles for overall layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f2f2f2; /* Light gray background for contrast */
+}
+
+/* Styles for the input form */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    width: 400px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+/* Input and button elements */
+input, button {
+    padding: 10px;
+    margin: 10px 0;
+    width: 90%;
+    font-size: 1em;
+}
+
+/* Form labels */
+label {
+    font-weight: bold;
+}
+
+/* Page headline */
+h1 {
+    text-align: center;
+}
+
+/* Centers summary section (e.g., current temp, high/low) */
+.centered-summary {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Container for the forecast list */
+.forecast-container {
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 8px;
+    width: 600px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Each individual forecast entry */
+.forecast-item {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Forecast period title */
+.forecast-item h3 {
+    margin-bottom: 5px;
+    font-size: 1.3em;
+    color: #333;
+}
+
+/* Forecast text and details */
+.forecast-item p {
+    margin: 0;
+    font-size: 1em;
+    color: #555;
+}

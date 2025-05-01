@@ -1,0 +1,81 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Forecast Results</title>
+
+    <!-- Link to custom CSS for layout and styling -->
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <!-- Dynamic background changes depending on time of day -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var hour = new Date().getHours();
+            var body = document.body;
+
+            if (hour >= 5 && hour < 9) {
+                body.style.background = "url('https://images.unsplash.com/photo-1494548162494-384bba4ab999?q=80&w=2360&auto=format&fit=crop') no-repeat center center fixed";
+            } else if (hour >= 9 && hour < 18) {
+                body.style.background = "url('https://images.unsplash.com/photo-1541119638723-c51cbe2262aa?w=700&auto=format&fit=crop') no-repeat center center fixed";
+            } else if (hour >= 18 && hour < 21) {
+                body.style.background = "url('https://media.istockphoto.com/id/2159825784/photo/sunset-sky.webp') no-repeat center center fixed";
+            } else {
+                body.style.background = "url('https://images.unsplash.com/photo-1509773896068-7fd415d91e2e?w=700&auto=format&fit=crop') no-repeat center center fixed";
+            }
+
+            body.style.backgroundSize = "cover";
+        });
+    </script>
+</head>
+<body>
+
+<h1>Weather Forecast Results</h1>
+
+<!-- Displays current temperature and overall high/low values -->
+<div class="forecast-summary centered-summary">
+    <p><strong>Current Temperature:</strong>
+        <!-- Format current temp to whole number if available -->
+        <span th:text="${currentTemp != null ? #numbers.formatDecimal(currentTemp, 0, 0) : 'N/A'}"></span>°F
+    </p>
+    <p><strong>Forecasted High (Overall):</strong>
+        <span th:text="${highTemp != null ? highTemp : 'N/A'}"></span>°F
+    </p>
+    <p><strong>Forecasted Low (Overall):</strong>
+        <span th:text="${lowTemp != null ? lowTemp : 'N/A'}"></span>°F
+    </p>
+</div>
+
+<!-- Iterates through forecast data if it exists -->
+<div class="forecast-container" th:if="${forecast != null}">
+    <div class="forecast-item" th:each="period : ${forecast}">
+        <!-- Forecast period label (e.g., Monday, Monday Night) -->
+        <h3 th:text="${period.name}"></h3>
+
+        <!-- Icon representing the forecast -->
+        <img th:src="${period.icon}" alt="Weather icon" width="50"><br>
+
+        <!-- Display high or low temperature depending on whether it's a daytime or nighttime forecast -->
+        <p>
+            <strong th:text="${period.name.toLowerCase().contains('night') ? 'Low:' : 'High:'}"></strong>
+            <span th:text="${period.temperature}"></span>°<span th:text="${period.temperatureUnit}"></span>
+        </p>
+
+        <!-- Detailed forecast text -->
+        <p>
+            <strong>Forecast:</strong>
+            <em th:text="${period.detailedForecast}"></em>
+        </p>
+    </div>
+</div>
+
+<!-- Message if no forecast data is available -->
+<div th:if="${forecast == null}">
+    <p>No forecast data available. Please try again.</p>
+</div>
+
+<!-- Link to return to search form -->
+<br>
+<a href="/">Search Again</a>
+
+</body>
+</html>
